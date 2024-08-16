@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Classe représentant un professeur dans le système scolaire.
- * Hérite de la classe Personne et implémente les interfaces IProfesseurDao et IEducation.
+ * Hérite de la classe Personne et implémente les interfaces IProfesseurDao et service.IEducation.
  */
 public class Professeur extends Personne  {
     private Boolean vacant;

@@ -2,7 +2,9 @@ package models;
 
 import dao.SingletonDataBase;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,24 +39,34 @@ public class Utilisateur {
         this.motDePasse = motDePasse;
     }
 
+    private static final String QUERY_VERIFIER_UTILISATEUR = "SELECT COUNT(*) FROM Utilisateur WHERE pseudo = ?";
+    private static final String QUERY_AJOUTER_UTILISATEUR = "INSERT INTO Utilisateur (pseudo, motDePasse, dateCreation) VALUES (?, ?, NOW())";
 
-    public void saveUser() throws SQLException {
 
-        try {
-            String query = "INSERT INTO Utilisateur (pseudo, motDePasse, dateCreation) VALUES (?, ?, ?)";
-            PreparedStatement statement = SingletonDataBase.getInstance().prepareStatement(query);
+    public static void saveUser() {
+        try (Connection connexion = SingletonDataBase.getInstance()) {
 
-            // Obtenir la date et l'heure actuelles
-            java.sql.Timestamp currentTimestamp = new java.sql.Timestamp(System.currentTimeMillis());
+            // Vérifier si l'utilisateur existe déjà
+            try (PreparedStatement instructionVerifier = connexion.prepareStatement(QUERY_VERIFIER_UTILISATEUR)) {
+                instructionVerifier.setString(1, "admin");
 
-            statement.setString(1, "admin");
-            statement.setString(2, "admin");
-            statement.setTimestamp(3, currentTimestamp);
+                try (ResultSet resultat = instructionVerifier.executeQuery()) {
+                    if (resultat.next() && resultat.getInt(1) > 0) {
+                        System.out.println("Utilisateur existe déjà.");
+                        return;
+                    }
+                }
+            }
 
-            statement.executeUpdate();
-            System.out.println("Utilisateur ajouté avec succès.");
+            // Ajouter l'utilisateur si non existant
+            try (PreparedStatement instructionAjouter = connexion.prepareStatement(QUERY_AJOUTER_UTILISATEUR)) {
+                instructionAjouter.setString(1, "admin");
+                instructionAjouter.setString(2, "admin");
+                instructionAjouter.executeUpdate();
+                System.out.println("Utilisateur 'admin' ajouté avec succès.");
+            }
+
         } catch (SQLException e) {
-            System.out.println("Erreur lors de l'ajout de l'utilisateur : " + e.getMessage());
+            e.printStackTrace();
         }
-
-}}
+    }}

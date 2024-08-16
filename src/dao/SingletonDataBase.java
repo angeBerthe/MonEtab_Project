@@ -25,9 +25,14 @@ public class SingletonDataBase {
         }
     }
 
-    public static Connection getInstance(){
-        if (connection==null){
-            new SingletonDataBase();
+    public static Connection getInstance() {
+        try {
+            if (connection == null || connection.isClosed()) {
+                new SingletonDataBase();
+                System.out.println("Nouvelle connexion à la base de données créée.");
+            }
+        } catch (SQLException e) {
+            System.out.println("Erreur lors de la vérification de l'état de la connexion : " + e.getMessage());
         }
         return connection;
     }

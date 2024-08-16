@@ -1,5 +1,6 @@
 package models;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Date;
  * sa date de naissance, sa ville de résidence, son nom, son prénom et son numéro de téléphone.
  */
 public class Personne {
-    private int id;
+    private int id; //Id sera géré automatiquement
     private Date dateDeNaissance;
     private String ville;
     private String prenom;
@@ -41,13 +42,25 @@ public class Personne {
         this.telephone = telephone;
     }
 
+    // Constructeur sans ID
+    public Personne(Date dateDeNaissance, String ville, String prenom, String nom, String telephone) {
+        this.dateDeNaissance = dateDeNaissance;
+        this.ville = ville;
+        this.prenom = prenom;
+        this.nom = nom;
+        this.telephone = telephone;
+    }
+
+
+
+
     /**
      * Obtient l'identifiant de la personne.
      *
      * @return L'identifiant unique de la personne
      */
     public int getId() {
-        return id;
+        return this.id;
     }
 
     /**
@@ -65,7 +78,7 @@ public class Personne {
      * @return La date de naissance de la personne
      */
     public Date getDateDeNaissance() {
-        return dateDeNaissance;
+        return this.dateDeNaissance;
     }
 
     /**
@@ -83,7 +96,7 @@ public class Personne {
      * @return La ville de résidence de la personne
      */
     public String getVille() {
-        return ville;
+        return this.ville;
     }
 
     /**
@@ -101,7 +114,7 @@ public class Personne {
      * @return Le prénom de la personne
      */
     public String getPrenom() {
-        return prenom;
+        return this.prenom;
     }
 
     /**
@@ -119,7 +132,7 @@ public class Personne {
      * @return Le nom de famille de la personne
      */
     public String getNom() {
-        return nom;
+        return this.nom;
     }
 
     /**
@@ -137,7 +150,7 @@ public class Personne {
      * @return Le numéro de téléphone de la personne
      */
     public String getTelephone() {
-        return telephone;
+        return this.telephone;
     }
 
     /**

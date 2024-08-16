@@ -2,16 +2,17 @@ package service;
 
 import models.Eleve;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface IEleveService {
 
-    Eleve save(Eleve eleve);
-    Eleve update(Eleve eleve);
-    void delete(int id);
-    List<Eleve> getAll();
+    public Eleve save(Eleve eleve) throws SQLException;
+    public Eleve update(Eleve eleve);
+    public void delete(int id);
+    public List<Eleve> getAll();
 
-    Eleve getOne(int id);
+   public Eleve getOne(int id);
 
 
 }

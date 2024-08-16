@@ -1,19 +1,26 @@
+import java.sql.SQLException;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Scanner;
 import Exception.NotFoundExceptionMenu;
 
 public class CreationDesDifferentsMenus {
 
+    Date date = new Date();
 
-    public static void afficherMenuPrincipal() {
+
+    public static void afficherMenuPrincipal() throws SQLException {
+        Instant debutSession = Instant.now();
         Scanner scanner = new Scanner(System.in);
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalTime localTime = LocalTime.parse(LocalTime.now().format(dateTimeFormatter), dateTimeFormatter);
         System.out.println("""
-                **********************************************************
-                                 BIENVENU DANS L' APPLICATION ETAB
-                **********************************************************
+                            *********************************************
+                                     BIENVENU DANS L' APPLICATION ETAB
+                            **********************************************
                                     
                 MENU:
                                     
@@ -23,6 +30,9 @@ public class CreationDesDifferentsMenus {
                         0: Quitter
                            
                 """);
+
+        System.out.println("Date système :" +localTime);
+
         System.out.print("Votre choix SVP : ");
         int choix = NotFoundExceptionMenu.obtenirChoixUtilisateur(scanner, 6);
 
@@ -37,14 +47,21 @@ public class CreationDesDifferentsMenus {
                 afficherMenuGestionUtilisateur();
                 break;
             case 0:
-                System.out.println("A bientôt");
+                Instant finSession = Instant.now();  // Capturer l'instant de la fin de la session
+                Duration duree = Duration.between(debutSession, finSession);
+
+                long heures = duree.toHours();
+                long minutes = duree.toMinutes() % 60;
+                long secondes = duree.getSeconds() % 60;
+
+                System.out.println("Merci d'avoir utilisé l'application ETAB. Au revoir !");
+                System.out.println("Durée de la session : " + heures + " heures, " + minutes + " minutes, " + secondes + " secondes.");
                 System.exit(0);
-                break;
         }
         System.out.println("Date système:" + localTime);
     }
 
-    public static void afficherMenuGestionProfesseurs() {
+    public static void afficherMenuGestionProfesseurs() throws SQLException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("""
                                  **************************************
@@ -88,7 +105,7 @@ public class CreationDesDifferentsMenus {
 
     }
 
-    public static void afficherMenuGestionEleves() {
+    public static void afficherMenuGestionEleves() throws SQLException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("""
                                 ***************************************
@@ -104,11 +121,45 @@ public class CreationDesDifferentsMenus {
                         0: Quitter  
                       
                 """);
+        System.out.print("Votre choix : ");
+        int choix = NotFoundExceptionMenu.obtenirChoixUtilisateur(scanner, 6);
+
+        switch (choix) {
+            case 1:
+                GestionDesEleves.ajouterEleve();
+                break;
+            case 2:
+                GestionDesEleves.supprimerEleve();
+                break;
+            case 3:
+                GestionDesEleves.modifierEleve();
+                break;
+            case 4:
+               GestionDesEleves.listerEleve();
+                break;
+            case 5:
+                afficherMenuGestionEleves();
+                break;
+            case 0:
+                System.out.println("A bientôt");
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Choix invalide. Veuillez réessayer.");
+
+
+        }
+
 
     }
 
     public static void afficherMenuGestionUtilisateur(){
 
+        Instant debutSession = Instant.now();
+
+        int choix;
+
+        do {
         Scanner scanner = new Scanner(System.in);
         System.out.println("""
                                 ***************************************
@@ -125,7 +176,34 @@ public class CreationDesDifferentsMenus {
                       
                 """);
 
+        System.out.print("Votre choix : ");
+
+        choix = NotFoundExceptionMenu.obtenirChoixUtilisateur(scanner, 6);
+
+        switch (choix) {
+            case 1:
+                // Implémentation de l'ajout d'un utilisateur à ajouter ici
+                break;
+            case 5:
+                //new MenuPrincipal().afficherMenu();
+                break;
+            case 0:
+                Instant finSession = Instant.now();  // Capturer l'instant de la fin de la session
+                Duration duree = Duration.between(debutSession, finSession);
+
+                long heures = duree.toHours();
+                long minutes = duree.toMinutes() % 60;
+                long secondes = duree.getSeconds() % 60;
+
+                System.out.println("Merci d'avoir utilisé l'application ETAB. Au revoir !");
+                System.out.println("Durée de la session : " + heures + " heures, " + minutes + " minutes, " + secondes + " secondes.");
+                System.exit(0);
+
+            default:
+                System.out.println("Choix invalide. Veuillez réessayer.");
+        }
+    } while (choix != 6);
+}
 
 
-    }
 }
